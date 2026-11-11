@@ -1,0 +1,33 @@
+
+# Python venvs
+.venv/
+venv/
+env/
+
+# Py files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# secrets
+.env
+.env.*
+
+# IDE settings
+.idea/
+.vscode/
+
+
+# Testing files
+.pytest_cache/
+.coverage
+htmlcov/
+
+# data
+uploads/
+data/
+*.parquet
+*.db
+
+# Logs
+*.log

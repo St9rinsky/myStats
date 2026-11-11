@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "UTF-8">
+    <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+    <title>myStats</title>
+    <link rel = "stylesheet" href = "style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>myStats</h1>
+        <p>Your data. Your questions. Meaningful answers.</p>
+        <span id = "status">Checking connection...</span>
+    </header>
+
+    <main>
+        <section class = "upload-section">
+            <h2>Upload a dataset</h2>
+            <input type = "file" id = "fileInput" accept = ".csv,.xlsx">
+            <p>CSV and Excel files supported.</p>
+        </section>
+
+        <section class = "chat-section">
+            <h2>Ask your data</h2>
+
+            <div id = "chatMessages">
+                <p class = "welcome">
+                    Welcome to myStats. Upload a dataset to get started.
+                </p>
+            </div>
+
+            <div class = "chat-input">
+                <input
+                    type = "text"
+                    id = "questionInput"
+                    placeholder = "Ask a question about your data..."
+                >
+                <button id="sendButton">Send</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
