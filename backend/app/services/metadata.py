@@ -57,18 +57,24 @@ def discover_metadata(df):
     """
 
     metadata = []
+    total_rows = len(df)
 
     for column in df.columns:
         series = df[column]
+        semantic_type = classify_semantic_type(str(column), series)
+        missing_count = int(series.isna().sum())
+        unique_count = int(series.nunique(dropna=True))
+        
+
         metadata.append({
             "column_name": str(column),
             "technical_type": str(series.dtype),
-            "semantic_type": classify_semantic_type(str(column), series),
-            "analytical_role": determine_analytics_role(classify_semantic_type(str(column), series), series),
-            "nullable": bool(series.isna().any()),
-            "missing_count": int(series.isna().sum()),
-            "unique_count": int(series.nunique(dropna=True)),
-            "unique_ratio": round(series.nunique(dropna=True) / len(df), 4)
+            "semantic_type": semantic_type,
+            "analytical_role": determine_analytics_role(semantic_type, series),
+            "nullable": missing_count > 0,
+            "missing_count": missing_count,
+            "unique_count": unique_count,
+            "unique_ratio": round(unique_count / total_rows, 4)
         })
 
     return metadata
