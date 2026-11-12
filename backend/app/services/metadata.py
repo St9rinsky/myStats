@@ -1,9 +1,9 @@
 import pandas as pd
 
 
-def check_semantic_type(column_name, series):
+def classify_semantic_type(column_name, series):
     """
-    check the likely business meaning of a column.
+    classify the likely business meaning of a column.
     """
 
     name = column_name.lower()
@@ -63,8 +63,8 @@ def discover_metadata(df):
         metadata.append({
             "column_name": str(column),
             "technical_type": str(series.dtype),
-            "semantic_type": check_semantic_type(str(column), series),
-            "analytical_role": determine_analytics_role(check_semantic_type(str(column), series), series),
+            "semantic_type": classify_semantic_type(str(column), series),
+            "analytical_role": determine_analytics_role(classify_semantic_type(str(column), series), series),
             "nullable": bool(series.isna().any()),
             "missing_count": int(series.isna().sum()),
             "unique_count": int(series.nunique(dropna=True)),
