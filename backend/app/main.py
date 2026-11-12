@@ -7,6 +7,8 @@ from fastapi import UploadFile, File, HTTPException
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
+from app.services.metadata import discover_metadata
+
 app = FastAPI(
     title="myStats",
     description="An AI analysis platform",
@@ -55,6 +57,7 @@ async def preview_dataset(file: UploadFile = File(...)):
             detail="Unable to read this CSV file"
         )
 
+    # dt profilling
     if df.empty:
         raise HTTPException(
             status_code=400,
@@ -67,14 +70,7 @@ async def preview_dataset(file: UploadFile = File(...)):
             detail="The CSV contains no columns"
         )
 
-    columns = []
-    for column in df.columns:
-        columns.append({
-            "name": str(column),
-            "data_type": str(df[column].dtype),
-            "missing_values": int(df[column].isna().sum()),
-            "unique_values": int(df[column].nunique())
-        })
+    columns = discover_metadata(df)
 
     sample = (
         df.head(5)
