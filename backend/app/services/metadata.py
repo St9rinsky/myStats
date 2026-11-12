@@ -31,6 +31,25 @@ def check_semantic_type(column_name, series):
     return "text"
 
 
+def determine_analytics_role(semantic_type, series):
+    """
+    Determine the likely analytics role of a dataset.
+    """
+    if semantic_type == "identifier": return "identifier"
+    if semantic_type == "boolean_or_outcome": return "outcome"
+    if semantic_type == "date": return "temporal_dimension"
+    if semantic_type == "categorical": return "dimension"
+
+    if semantic_type in ["monetary", "duration", "numeric"]:
+        if series.nunique(dropna=True) <= 10:
+            return "dimension"
+
+        return "measure"
+
+    if semantic_type == "text": return "descriptive_attribute"
+    return "unknown"
+
+
 def discover_metadata(df):
     """
     Discover technical and semantic metadata
@@ -45,6 +64,7 @@ def discover_metadata(df):
             "column_name": str(column),
             "technical_type": str(series.dtype),
             "semantic_type": check_semantic_type(str(column), series),
+            "analytical_role": determine_analytics_role(check_semantic_type(str(column), series), series),
             "nullable": bool(series.isna().any()),
             "missing_count": int(series.isna().sum()),
             "unique_count": int(series.nunique(dropna=True)),
