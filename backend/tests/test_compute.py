@@ -1,6 +1,6 @@
 import pandas as pd
 
-from app.services.compute import get_overview , group_by, filter_data, sort_data, add_calculated_column
+from app.services.compute import get_overview , group_by, filter_data, sort_data, add_calculated_column, aggregate_data
 
 
 df = pd.DataFrame({
@@ -72,3 +72,25 @@ result = add_calculated_column(
 )
 
 print(result)
+
+
+
+df = pd.DataFrame({
+    "Product": ["Bread", "Milk", "Bread", "Milk"],
+    "Revenue": [200, 150, 160, 360]
+})
+
+total_revenue = aggregate_data(
+    df=df,
+    column="Revenue",
+    operation="sum"
+)
+
+average_revenue = aggregate_data(
+    df=df,
+    column="Revenue",
+    operation="mean"
+)
+
+print("Total revenue:", total_revenue)
+print("Average revenue:", average_revenue)
