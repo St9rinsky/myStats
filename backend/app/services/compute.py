@@ -107,29 +107,50 @@ def group_by( df: pd.DataFrame, group_column: str, aggregation_column: str | Non
     }
 
 
-
-def filter_data( df: pd.DataFrame, column: str, operator: str, value):
+def filter_data(df: pd.DataFrame, conditions: list[dict], logic: str = "AND"):
     """
-    Filter a dataset using a specified column and condition.
+    Filter a dataset using multiple conditions.
     """
 
-    #non existent column in dataframe
-    if column not in df.columns:
-        raise ValueError(f"Column '{column}' does not exist")
+    if not conditions:
+        raise ValueError("At least one filtering condition is required")
+
+    if logic not in {"AND", "OR"}:
+        raise ValueError("Logic must be AND or OR")
 
     operations = {
-        "==": lambda series: series == value,
-        "!=" or "<>": lambda series: series != value,
-        ">": lambda series: series > value,
-        "<": lambda series: series < value,
-        ">=": lambda series: series >= value,
-        "<=": lambda series: series <= value,
+        "==": lambda series, value: series == value,
+        "!=" or "<>": lambda series, value: series != value,
+        ">": lambda series, value: series > value,
+        "<": lambda series, value: series < value,
+        ">=": lambda series, value: series >= value,
+        "<=": lambda series, value: series <= value,
     }
 
-    if operator not in operations:
-        raise ValueError(f"Unsupported operator: {operator}")
+    filters = []
 
-    filtered_df = df[operations[operator](df[column])]
+    for condition in conditions:
+        column = condition["column"]
+        operator = condition["operator"]
+        value = condition["value"]
 
-    return filtered_df
+        if column not in df.columns:
+            raise ValueError(f"Column '{column}' does not exist")
+
+        if operator not in operations:
+            raise ValueError(f"Unsupported operator: {operator}")
+
+        filter = operations[operator](df[column], value)
+        filters.append(filter)
+
+    combined_filter = filter[0]
+
+    #skips for only 1 filters
+    for filter in filters[1:]:
+        if logic == "AND":
+            combined_filter = combined_filter & filter
+        else:
+            combined_filter = combined_filter | filter
+
+    return df[combined_filter]
 
