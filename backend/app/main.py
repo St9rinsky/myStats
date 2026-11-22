@@ -91,6 +91,19 @@ async def preview_dataset(file: UploadFile = File(...)):
         "sample_data": sample
     }
 
+@app.get("/api/datasets/active")
+def get_active_dataset():
+
+    summary = get_dataset_summary()
+
+    if summary is None:
+        raise HTTPException(
+            status_code=404,
+            detail="No active dataset found"
+        )
+
+    return summary
+
 
 frontend_directory = Path(__file__).resolve().parents[2] / "frontend"
 
