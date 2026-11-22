@@ -47,20 +47,30 @@ def get_overview(df: pd.DataFrame):
 
 def group_by( df: pd.DataFrame, group_column: str, aggregation_column: str | None = None, operation: str = "count"):
     """
-    Group a dataset by a specified column and perform an aggregation.
+    Group dataset df by group column and perform aggregations calculations based on the agregation column and operation specified
+
+    ARGs
+    - df: pd.DataFrame - The dataset to be grouped
+    - group_column: str - The column to group by
+    - aggregation_column: str | None - The column to perform aggregation on (optional)
+    - operation: str - The aggregation operation to perform (default: "count")
+
+    EXAMPLE
+    Group a dataset by country and calculate the count of rows in each group
     """
 
+    # non existant column in dataframe
     if group_column not in df.columns:
         raise ValueError(f"Column '{group_column}' does not exist")
 
+    # if the aggregation column is given but does not exist in the dataframe
     if aggregation_column is not None and aggregation_column not in df.columns:
         raise ValueError(f"Column '{aggregation_column}' does not exist")
 
-    # operations for groupings
+    # surported operations
     allowed_operations = {
         "count", "sum", "mean", "median", "min", "max", "nunique"
     }
-
     if operation not in allowed_operations:
         raise ValueError(f"Unsupported operation: {operation}")
 
@@ -71,6 +81,7 @@ def group_by( df: pd.DataFrame, group_column: str, aggregation_column: str | Non
         if operation != "count":
             raise ValueError("An aggregation column is required for this operation")
 
+        #get the count of rows in each group
         result = grouped.size()
 
     else:
