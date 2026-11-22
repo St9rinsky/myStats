@@ -199,3 +199,29 @@ def add_calculated_column(df: pd.DataFrame, new_column: str, source_column: str,
     result[new_column] = operations[operation](result[source_column])
 
     return result
+
+
+
+def aggregate_data(df: pd.DataFrame, column: str, operation: str):
+    """
+    Aggregate a specified column using a chosen operation.
+    """
+
+    if column not in df.columns:
+        raise ValueError(f"Column '{column}' does not exist")
+
+    operations = {
+        "sum": lambda series: series.sum(),
+        "mean": lambda series: series.mean(),
+        "median": lambda series: series.median(),
+        "min": lambda series: series.min(),
+        "max": lambda series: series.max(),
+        "count": lambda series: series.count(),
+        "nunique": lambda series: series.nunique()
+    }
+
+    if operation not in operations:
+        raise ValueError( f"Unsupported aggregation: {operation}")
+
+    return operations[operation](df[column])
+
