@@ -3,6 +3,8 @@ from pathlib import Path
 from io import BytesIO
 import pandas as pd
 
+from app.services.data_manager import store_dataset, get_dataset_summary
+
 from fastapi import UploadFile, File, HTTPException
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
@@ -71,6 +73,8 @@ async def preview_dataset(file: UploadFile = File(...)):
         )
 
     columns = discover_metadata(df)
+
+    store_dataset(df=df, filename=file.filename,metadata=columns)
 
     sample = (
         df.head(5)
