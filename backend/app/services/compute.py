@@ -105,3 +105,31 @@ def group_by( df: pd.DataFrame, group_column: str, aggregation_column: str | Non
         "operation": operation,
         "results": results
     }
+
+
+
+def filter_data( df: pd.DataFrame, column: str, operator: str, value):
+    """
+    Filter a dataset using a specified column and condition.
+    """
+
+    #non existent column in dataframe
+    if column not in df.columns:
+        raise ValueError(f"Column '{column}' does not exist")
+
+    operations = {
+        "==": lambda series: series == value,
+        "!=" or "<>": lambda series: series != value,
+        ">": lambda series: series > value,
+        "<": lambda series: series < value,
+        ">=": lambda series: series >= value,
+        "<=": lambda series: series <= value,
+    }
+
+    if operator not in operations:
+        raise ValueError(f"Unsupported operator: {operator}")
+
+    filtered_df = df[operations[operator](df[column])]
+
+    return filtered_df
+
