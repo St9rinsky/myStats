@@ -154,3 +154,21 @@ def filter_data(df: pd.DataFrame, conditions: list[dict], logic: str = "AND"):
 
     return df[combined_filter]
 
+
+
+def sort_data(df: pd.DataFrame, column: str, ascending: bool = True):
+    """
+    Sort a dataset using a specified column.
+    """
+
+    if column not in df.columns:
+        raise ValueError(f"Column '{column}' does not exist")
+
+    if not isinstance(ascending, bool):
+        raise ValueError("Ascending must be a boolean")
+
+    sorted_df = df.sort_values( by=column, ascending=ascending)
+
+    return sorted_df
+
+
