@@ -23,9 +23,24 @@ df = pd.DataFrame({
 
 result = filter_data(
     df=df,
-    column="MonthlyCharges",
-    operator=">",
-    value=100
+    conditions=[
+        {"column": "MonthlyCharges", "operator": ">", "value": 100}
+    ],
 )
 
 print(result)
+
+
+# multiple conditions
+result = filter_data(
+    df=df,
+    conditions=[
+        {"column": "MonthlyCharges", "operator": ">", "value": 100},
+        {"column": "customerID", "operator": "!=", "value": "2"}
+    ],
+    logic="AND"
+)
+
+print(result)
+
+
