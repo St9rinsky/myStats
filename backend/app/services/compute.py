@@ -172,3 +172,30 @@ def sort_data(df: pd.DataFrame, column: str, ascending: bool = True):
     return sorted_df
 
 
+
+def add_calculated_column(df: pd.DataFrame, new_column: str, source_column: str, operation: str, value):
+    """
+    Create a new calculated column using an existing column.
+    """
+
+    if source_column not in df.columns:
+        raise ValueError( f"Column '{source_column}' does not exist")
+
+    operations = {
+        "add": lambda series: series + value,
+        "subtract": lambda series: series - value,
+        "multiply": lambda series: series * value,
+        "divide": lambda series: series / value
+    }
+
+    if operation not in operations:
+        raise ValueError( f"Unsupported operation: {operation}")
+
+    if operation == "divide" and value == 0:
+        raise ValueError("Cannot divide by zero")
+
+    result = df.copy()
+
+    result[new_column] = operations[operation](result[source_column])
+
+    return result
