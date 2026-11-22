@@ -4,6 +4,14 @@
 
 myStats allows users to upload datasets and ask natural-language questions to obtain analytical insights backed by their actual data
 
+## flow
+
+- upload csv
+- data profilling : Discover columns, data types, missing values, duplicates, unique values, and distributions.
+- Data processing : Clean data where appropriate, calculate statistics, group records, compare populations, and identify patterns.
+- ai analysis : Interpret the question, determine which analyses are needed, and explain the resulting evidence.
+- Business insight
+
 ## Current Features
 
 - FastAPI backend
