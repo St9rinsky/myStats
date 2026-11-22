@@ -10,8 +10,8 @@ def get_overview(df: pd.DataFrame):
     overview = {
         "total_rows": len(df),
         "total_columns": len(df.columns),
-        "duplicate_rows": int(df.duplicated().sum()),
-        "total_missing_values": int(df.isna().sum().sum()),
+        "duplicate_rows": int(df.duplicated().sum()), #dup rows
+        "total_missing_values": int(df.isna().sum().sum()), #missing values
         "columns_with_missing_values": {},
         "numeric_summary": {}
     }
