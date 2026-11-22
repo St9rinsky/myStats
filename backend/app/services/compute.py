@@ -120,7 +120,7 @@ def filter_data(df: pd.DataFrame, conditions: list[dict], logic: str = "AND"):
 
     operations = {
         "==": lambda series, value: series == value,
-        "!=" or "<>": lambda series, value: series != value,
+        "!=": lambda series, value: series != value,
         ">": lambda series, value: series > value,
         "<": lambda series, value: series < value,
         ">=": lambda series, value: series >= value,
@@ -143,7 +143,7 @@ def filter_data(df: pd.DataFrame, conditions: list[dict], logic: str = "AND"):
         filter = operations[operator](df[column], value)
         filters.append(filter)
 
-    combined_filter = filter[0]
+    combined_filter = filters[0]
 
     #skips for only 1 filters
     for filter in filters[1:]:
