@@ -42,3 +42,55 @@ def get_overview(df: pd.DataFrame):
         }
 
     return overview
+
+
+
+def group_by( df: pd.DataFrame, group_column: str, aggregation_column: str | None = None, operation: str = "count"):
+    """
+    Group a dataset by a specified column and perform an aggregation.
+    """
+
+    if group_column not in df.columns:
+        raise ValueError(f"Column '{group_column}' does not exist")
+
+    if aggregation_column is not None and aggregation_column not in df.columns:
+        raise ValueError(f"Column '{aggregation_column}' does not exist")
+
+    # operations for groupings
+    allowed_operations = {
+        "count", "sum", "mean", "median", "min", "max", "nunique"
+    }
+
+    if operation not in allowed_operations:
+        raise ValueError(f"Unsupported operation: {operation}")
+
+    grouped = df.groupby(group_column, dropna=False)
+
+    # Perform aggregation
+    if aggregation_column is None:
+        if operation != "count":
+            raise ValueError("An aggregation column is required for this operation")
+
+        result = grouped.size()
+
+    else:
+        result = grouped[aggregation_column].agg(operation)
+
+    results = []
+
+    for group_value, aggregate_value in result.items():
+
+        if pd.isna(group_value): group_value = None
+        elif hasattr(group_value, "item"): group_value = group_value.item()
+
+        if pd.isna(aggregate_value): aggregate_value = None
+        elif hasattr(aggregate_value, "item"): aggregate_value = aggregate_value.item()
+
+        results.append({group_column: group_value, "value": aggregate_value})
+
+    return {
+        "group_column": group_column,
+        "aggregation_column": aggregation_column,
+        "operation": operation,
+        "results": results
+    }
