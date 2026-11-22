@@ -1,6 +1,6 @@
 import pandas as pd
 
-from app.services.compute import get_overview , group_by, filter_data
+from app.services.compute import get_overview , group_by, filter_data, sort_data, add_calculated_column
 
 
 df = pd.DataFrame({
@@ -44,3 +44,31 @@ result = filter_data(
 print(result)
 
 
+df = pd.DataFrame({
+    "customerID": ["1", "2", "3", "4"],
+    "MonthlyCharges": [50, 120, 90, 150]
+})
+
+result = sort_data(
+    df=df,
+    column="MonthlyCharges",
+    ascending=False
+)
+
+print(result)
+
+
+df = pd.DataFrame({
+    "customerID": ["1", "2", "3"],
+    "MonthlyCharges": [50, 120, 90]
+})
+
+result = add_calculated_column(
+    df=df,
+    new_column="AnnualCharges",
+    source_column="MonthlyCharges",
+    operation="multiply",
+    value=12
+)
+
+print(result)
